@@ -120,6 +120,7 @@ afl-fuzz -d -i in -o out -N <server info> -x <dictionary file> -P <protocol> -D 
 ```
 
 # Tutorial - Fuzzing Live555 media streaming server
+教程 - 模糊 Live555 媒体流服务器
 
 [Live555 Streaming Media](http://live555.com) is a C++ library for multimedia streaming. The library supports open protocols such as RTP/RTCP and RTSP for streaming. It is used internally by widely-used media players such as [VLC](https://videolan.org) and [MPlayer](http://mplayerhq.hu) and some security cameras & network video recorders (e.g., [DLink D-View Cameras](http://files.dlink.com.au/products/D-ViewCam/REV_A/Manuals/Manual_v3.51/D-ViewCam_DCS-100_B1_Manual_v3.51(WW).pdf), [Senstar Symphony](http://cdn.aimetis.com/public/Library/Senstar%20Symphony%20User%20Guide%20en-US.pdf), [WISENET Video Recorder](https://www.eos.com.au/pub/media/doc/wisenet/Manuals_QRN-410S,QRN-810S,QRN-1610S_180802_EN.pdf)). In this example, we show how AFLNet can be used to fuzz Live555 and discover bugs in its RTSP server reference implementation (testOnDemandRTSPServer). Similar steps would be followed to fuzz servers implementing other protocols (e.g., FTP, SMTP, SSH).
 
@@ -131,6 +132,7 @@ Live555 Streaming Media 是一个用于多媒体流的 C++ 库。 该库支持 R
 
 
 ## Step-0. Server and client compilation & setup
+步骤0。 服务器和客户端编译和设置
 
 The newest source code of Live555 can be downloaded as a tarball at [Live555 public page](http://live555.com/liveMedia/public/). There is also [a mirror of the library](https://github.com/rgaufman/live555) on GitHub. In this example, we choose to fuzz an [old version of Live555](https://github.com/rgaufman/live555/commit/ceeb4f462709695b145852de309d8cd25e2dca01) which was commited to the repository on August 28th, 2018. While fuzzing this specific version of Live555, AFLNet exposed four vulnerabilites in Live555, two of which were zero-day. To compile and setup Live555, please use the following commands.
 
@@ -176,6 +178,7 @@ We should see the outputs from the sample client showing that it successfully co
 我们应该看到示例客户端的输出，显示它成功连接到服务器、发送请求并接收响应，包括来自服务器的流数据。
 
 ## Step-1. Prepare message sequences as seed inputs
+步骤1。 准备消息序列作为种子输入
 
 AFLNet takes message sequences as seed inputs so we first capture some sample usage scenarios between the sample client (testRTSPClient) and the server under test (SUT). The following steps show how we prepare a seed input for AFLNet based on a usage scenario in which the server streams an audio file in WAV format to the client upon requests. The same steps can be followed to prepare other seed inputs for other media source files (e.g., WebM, MP3).
 
